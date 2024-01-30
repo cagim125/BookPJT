@@ -12,7 +12,7 @@ public class AdminMemberVo {
 	String a_m_position; // 관리자 업무
 	String a_m_mail;
 	String a_m_phone;
-	String a_m_reg_data;	// 관리자 등록일
+	String a_m_reg_date;	// 관리자 등록일
 	String a_m_mod_date;	// 관리자 수정일
 	
 	
@@ -76,11 +76,11 @@ public class AdminMemberVo {
 	public void setA_m_phone(String a_m_phone) {
 		this.a_m_phone = a_m_phone;
 	}
-	public String getA_m_reg_data() {
-		return a_m_reg_data;
+	public String getA_m_reg_date() {
+		return a_m_reg_date;
 	}
-	public void setA_m_reg_data(String a_m_reg_data) {
-		this.a_m_reg_data = a_m_reg_data;
+	public void setA_m_reg_date(String a_m_reg_date) {
+		this.a_m_reg_date = a_m_reg_date;
 	}
 	public String getA_m_mod_date() {
 		return a_m_mod_date;
