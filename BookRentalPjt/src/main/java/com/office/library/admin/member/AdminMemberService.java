@@ -1,5 +1,7 @@
 package com.office.library.admin.member;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,12 @@ public class AdminMemberService {
 	
 	@Autowired
 	AdminMemberDao adminMemberDao;
+	
+	public List<AdminMemberVo> listupAdmin() {
+		System.out.println("[AdminMemberService] listupAdmin()");
+		
+		return adminMemberDao.selectAdmins();
+	}
 	
 	public int createAccountConfirm(AdminMemberVo adminMemberVo) {
 		System.out.println("[AdminMemberService] createAccountConfirm()");
