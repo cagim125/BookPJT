@@ -11,7 +11,6 @@
 		
 		if (result)
 			location.href = "<c:url value='/book/admin/deleteBookConfirm?b_no='/>" + b_no;
-
 	}
 
 </script>

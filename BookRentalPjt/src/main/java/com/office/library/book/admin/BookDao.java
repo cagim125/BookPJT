@@ -2,6 +2,7 @@ package com.office.library.book.admin;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,5 +94,112 @@ public class BookDao {
 		return bookVos.size() > 0 ? bookVos : null;
 	}
 	
+	public BookVo selectBook(int b_no) {
+		System.out.println("[BookDao] selectBook()");
+		
+		String sql = "SELECT * FROM tbl_book WHERE b_no = ?";
+		
+		List<BookVo> bookVos = null;
+		
+		try {
+			bookVos = jdbcTemplate.query(sql, new RowMapper<BookVo>() {
+				
+				@Override
+				public BookVo mapRow(ResultSet rs, int rowNum) throws SQLException {
+					
+					BookVo bookVo = new BookVo();
+					
+					bookVo.setB_no(rs.getInt("b_no"));
+					bookVo.setB_thumbnail(rs.getString("b_thumbnail"));
+					bookVo.setB_name(rs.getString("b_name"));
+					bookVo.setB_author(rs.getString("b_author"));
+					bookVo.setB_publisher(rs.getString("b_publisher"));
+					bookVo.setB_publish_year(rs.getString("b_publish_year"));
+					bookVo.setB_isbn(rs.getString("b_isbn"));
+					bookVo.setB_call_number(rs.getString("b_call_number"));
+					bookVo.setB_rantal_able(rs.getInt("b_rantal_able"));
+					bookVo.setB_reg_date(rs.getString("b_reg_date"));
+					bookVo.setB_mod_date(rs.getString("b_mod_date"));
+					
+					return bookVo;
+					
+				}
+			}, b_no);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+//		System.out.println(bookVos.size());
+		return bookVos.size() > 0 ? bookVos.get(0) : null;
+	} 
+	
+	
+	public int updateBook(BookVo bookVo) {
+		System.out.println("[BookDao] updateBook()");
+		
+		List<String> args = new ArrayList<String>();
+		
+		String sql = "UPDATE tbl_book SET ";
+		if(bookVo.getB_thumbnail() != null) {
+			sql += "b_thumbnail = ?, ";
+			args.add(bookVo.getB_thumbnail());	
+		}
+		
+			sql += "b_name = ?, ";
+		   args.add(bookVo.getB_name());
+		   
+		   sql += "b_author = ?, ";
+		   args.add(bookVo.getB_author());
+		   
+		   sql += "b_publisher = ?, ";
+		   args.add(bookVo.getB_publisher());
+		   
+		   sql += "b_publish_year = ?, ";
+		   args.add(bookVo.getB_publish_year());
+		   
+		   sql += "b_isbn = ?, ";
+		   args.add(bookVo.getB_isbn());
+		   
+		   sql += "b_call_number = ?, ";
+		   args.add(bookVo.getB_call_number());
+		   
+		   sql += "b_rantal_able = ?, ";
+		   args.add(Integer.toString(bookVo.getB_rantal_able()));
+		   
+		   sql += "b_mod_date = NOW() ";
+		   
+		   sql += "WHERE b_no = ?";
+		   args.add(Integer.toString(bookVo.getB_no()));
+		   
+	
+		   int result = -1;
+		   
+		   try {
+			   
+			   result = jdbcTemplate.update(sql, args.toArray());
+			   
+		   }catch(Exception e) {
+			   e.printStackTrace();
+		   }
+		   
+		  return result;
+	}
+	
+	public int deleteBook(int b_no) {
+		System.out.println("[BookDao] deleteBook()");
+		
+		String sql = "DELETE FROM tbl_book "
+				+ "WHERE b_no = ?";
+		
+		int result = -1;
+		
+		try {
+			result = jdbcTemplate.update(sql, b_no);
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
 	
 }
