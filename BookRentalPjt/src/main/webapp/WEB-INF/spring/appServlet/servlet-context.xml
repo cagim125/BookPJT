@@ -25,6 +25,13 @@
 	<context:component-scan base-package="com.office.library"
 	name-generator="com.office.library.config.LibraryBeanNameGenerator" />
 	
+	<interceptors>
+		<interceptor>
+			<mapping path="/book/user/rentalBookConfirm"/>
+			<beans:bean
+				class="com.office.library.user.member.UserMemberLoginInterceptor"/>
+		</interceptor>
+	</interceptors>
 	
 	
 </beans:beans>
