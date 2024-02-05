@@ -22,7 +22,8 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
-	<context:component-scan base-package="com.office.library" />
+	<context:component-scan base-package="com.office.library"
+	name-generator="com.office.library.config.LibraryBeanNameGenerator" />
 	
 	
 	
