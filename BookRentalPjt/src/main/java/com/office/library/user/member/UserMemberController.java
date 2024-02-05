@@ -77,11 +77,11 @@ public class UserMemberController {
 			
 			String nextPage = "user/member/modify_account_form";
 			
-			UserMemberVo loginedUserMemberVo = 
-					(UserMemberVo) session.getAttribute("loginedUserMemberVo");
-			
-			if (loginedUserMemberVo == null)
-				nextPage = "user/member/login_form";
+//			UserMemberVo loginedUserMemberVo = 
+//					(UserMemberVo) session.getAttribute("loginedUserMemberVo");
+//			
+//			if (loginedUserMemberVo == null)
+//				nextPage = "user/member/login_form";
 			
 			return nextPage;
 		}
