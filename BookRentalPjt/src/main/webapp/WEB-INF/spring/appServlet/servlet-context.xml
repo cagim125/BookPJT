@@ -30,6 +30,13 @@
 			<mapping path="/book/user/rentalBookConfirm"/>
 			<mapping path="/user/member/modifyAccountForm"/>
 			<mapping path="/user/member/modifyAccountConfirm"/>
+			<mapping path="/book/user/rentalBookConfirm"/>
+			<mapping path="/book/user/enterBookshelf"/>
+			<mapping path="/book/user/listupRentalBookHistory"/>
+			<mapping path="/book/user/requestHopeBookConfirm"/>
+			<mapping path="/book/user/listupRequestHopeBook"/>
+			
+			
 			<beans:bean
 				class="com.office.library.user.member.UserMemberLoginInterceptor"/>
 		</interceptor>

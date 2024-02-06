@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.office.library.book.BookVo;
+import com.office.library.book.HopeBookVo;
+import com.office.library.book.RentalBookVo;
 
 @Service
 public class BookService {
@@ -60,10 +62,57 @@ public class BookService {
 	}
 	
 	public int deleteBookConfirm(int b_no) {
-		System.out.println("[BookService] deleteBookConfirm");
+		System.out.println("[BookService] deleteBookConfirm()");
 		
 		return bookDao.deleteBook(b_no);
 	}
+
+	public List<RentalBookVo> getRentalBooks() {
+		System.out.println("[BookService] getRentalBooks()");
+		
+		return bookDao.selectRentalBooks();
+	}
 	
+	public int returnBookConfirm(int b_no, int rb_no) {
+		System.out.println("[BookService] returnBookConfirm()");
+		
+		int result = bookDao.updateRentalBook(rb_no);
+		
+		if (result > 0) 
+			result = bookDao.updateBook(b_no);
+		
+		return result;
+	}
 	
+	public List<HopeBookVo> getHopeBooks() {
+		System.out.println("[BookService] getHopeBooks()");
+		
+		return bookDao.selectHopeBooks();
+	}
+	
+	public int registerHopeBookConfirm(BookVo bookVo, int hb_no) {
+		System.out.println("[adminBookService] registerHopeBookConfirm()");
+		
+		boolean isISBN = bookDao.isISBN(bookVo.getB_isbn());
+		
+		if(!isISBN) {
+			int result = bookDao.insertBook(bookVo);
+			
+			if(result > 0) {
+				bookDao.updateHopeBookResult(hb_no);
+				
+				return BOOK_REGISTER_SUCCESS;
+			}else {
+				return BOOK_REGISTER_FAIL;
+			}
+		}else {
+			return BOOK_ISBN_ALREADY_EXIST;
+		}
+	}
+	
+	public List<BookVo> getAllBooks() {
+		System.out.println("[BookService] getAllBooks()");
+		
+		return bookDao.selectAllBooks();
+	}
 }

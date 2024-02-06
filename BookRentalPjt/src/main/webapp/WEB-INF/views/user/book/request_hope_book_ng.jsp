@@ -27,6 +27,7 @@
 			<div class="word">
 			
 				<h3>REQUEST HOPE BOOK FAIL!!</h3>
+				<button></button>
 				
 			</div>
 		

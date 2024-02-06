@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.office.library.book.BookVo;
+import com.office.library.book.HopeBookVo;
+import com.office.library.book.RentalBookVo;
 import com.office.library.user.member.UserMemberVo;
 
 @Controller
@@ -67,6 +69,99 @@ public class BookController {
 		if (result <= 0)
 			nextPage = "user/book/rental_book_ng";
 		
+		
+		return nextPage;
+	}
+	
+	// 나의 책상
+	@GetMapping("/enterBookshelf")
+	public String enterBookshelf(HttpSession session, Model model) {
+		System.out.println("[UserBookController] enterBookshelf()");
+		
+		String nextPage = "user/book/bookshelf";
+		
+		UserMemberVo loginedUserMemberVo =
+				(UserMemberVo) session.getAttribute("loginedUserMemberVo");
+		
+		List<RentalBookVo> rentalBookVos =
+				bookService.enterBookshelf(loginedUserMemberVo.getU_m_no());
+		
+		model.addAttribute("rentalBookVos", rentalBookVos);
+		
+		return nextPage;
+	}
+	
+	//도서 반납 확인
+	@GetMapping("/listupRentalBookHistory")
+	public String listupRentalBookHistory(HttpSession session, Model model) {
+	System.out.println("[BookController] listupRentalBookHistory()");
+				
+		String nextPage = "user/book/rental_book_history";
+				
+		UserMemberVo loginedUserMemberVo = (UserMemberVo)
+				session.getAttribute("loginedUserMemberVo");
+						
+		List<RentalBookVo> rentalBookVos =  bookService.listupRentalBookHistory(loginedUserMemberVo.getU_m_no());
+						
+		model.addAttribute("rentalBookVos", rentalBookVos);
+					
+		return nextPage;
+					
+	}
+	
+	@GetMapping("/requestHopeBookForm")
+	public String requestHopeBookForm() {
+		
+		System.out.println("[BookController] requestHopeBookForm()");
+		
+		String nextPage = "user/book/request_hope_book_form";
+		
+		return nextPage;
+		
+	}
+	
+	@GetMapping("requestHopeBookConfirm")
+	public String requestHopeBookConfirm(HopeBookVo hopeBookVo, HttpSession session) {
+		System.out.println("[BookController] requestHopeBookConfirm()");
+		
+		String nextPage = "user/book/request_hope_book_ok";
+		
+		UserMemberVo logineduserMemberVo = (UserMemberVo) 
+				session.getAttribute("loginedUserMemberVo");
+		hopeBookVo.setU_m_no(logineduserMemberVo.getU_m_no());
+		
+		int alreadyHopeBook = bookService.alreadyHopeBookConfirm(hopeBookVo);
+		
+		int result = -1;
+		
+		System.out.println(alreadyHopeBook);
+		
+		if (alreadyHopeBook == 1)
+			result = bookService.requestHopeBookConfirm(hopeBookVo);
+		else 
+			nextPage = "user/book/request_hope_book_already";
+		
+		if (result <= 0)
+			nextPage = "user/book/request_hope_book_ng";
+		
+		return nextPage;
+		
+	}
+	
+	//희망 도서 요청 목록
+	@GetMapping("/listupRequestHopeBook")
+	public String listupRequestHopeBook(HttpSession session, Model model) {
+		System.out.println("[UserBookController] listupRequestHopeBook()");
+		
+		String nextPage = "user/book/list_hope_book";
+		
+		UserMemberVo loginedUserMemberVo = (UserMemberVo) 
+				session.getAttribute("loginedUserMemberVo");
+		
+		List<HopeBookVo> hopeBookVos = 
+				bookService.listupRequestHopeBook(loginedUserMemberVo.getU_m_no());
+		
+		model.addAttribute("hopeBookVos", hopeBookVos);
 		
 		return nextPage;
 	}

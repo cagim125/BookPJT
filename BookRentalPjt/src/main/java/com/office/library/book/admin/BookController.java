@@ -2,6 +2,8 @@ package com.office.library.book.admin;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,7 +14,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.office.library.book.BookVo;
+import com.office.library.book.HopeBookVo;
+import com.office.library.book.RentalBookVo;
 import com.office.library.book.admin.util.UploadFileService;
+import com.office.library.user.member.UserMemberVo;
 
 @Controller
 @RequestMapping("/book/admin")
@@ -132,6 +137,102 @@ public class BookController {
 			
 			if (result <= 0 )
 				nextPage = "admin/book/delete_book_ng";
+			
+			return nextPage;
+		}
+		
+		//대출 도서 목록
+		@GetMapping("/getRentalBooks")
+		public String getRentalBooks(Model model) {
+			System.out.println("[BookController] getRentalBooks()");
+			
+			String nextPage = "admin/book/rental_books";
+			
+			List<RentalBookVo> rentalBookVos = bookService.getRentalBooks();
+			
+			model.addAttribute("rentalBookVos", rentalBookVos);
+			
+			return nextPage;
+		}
+		
+		//도서 반납 확인
+		@GetMapping("/returnBookConfirm")
+		public String returnBookConfirm(@RequestParam("b_no") int b_no,
+										@RequestParam("rb_no") int rb_no) {
+			
+			System.out.println("[BookController] returnBookConfirm()");
+			
+			String nextPage = "admin/book/return_book_ok";
+			
+			int result =  bookService.returnBookConfirm(b_no, rb_no);
+			
+			if (result <= 0 ) {
+				nextPage = "admin/book/return_book_ng";
+			}
+			
+			return nextPage;
+			
+		}
+		
+		@GetMapping("/getHopeBooks")
+		public String getHopeBooks(Model model) {
+			System.out.println("[BookController] getHopeBooks()");
+			
+			String nextPage = "admin/book/hope_books";
+			
+			List<HopeBookVo> hopeBookVos = bookService.getHopeBooks();
+			
+			model.addAttribute("hopeBookVos", hopeBookVos);
+			
+			return nextPage;
+		}
+		
+		@GetMapping("/registerHopeBookForm")
+		public String registerHopeBookForm(Model model, HopeBookVo hopeBookVo) {
+			System.out.println("[BookController] registerHopeBookForm()");
+			
+			String nextPage = "admin/book/register_hope_book_form";
+								
+			model.addAttribute("hopeBookVo", hopeBookVo);
+			
+			return nextPage;
+		}
+		
+		// 희망 도서등록(입고처리) 확인
+				@PostMapping("/registerHopeBookConfirm")
+				public String registerHopeBookConfirm(BookVo bookVo, @RequestParam("hb_no") int hb_no, 
+						@RequestParam("file") MultipartFile file) {
+					System.out.println("[BookController] registerHopeBookConfirm()");
+					
+					System.out.println("hb_no : " + hb_no);
+					
+					// 파일 저장
+					String savedFileName = uploadFileService.upload(file);
+					
+					String nextPage = "admin/book/register_book_ok";
+					
+					if (savedFileName != null) {
+						bookVo.setB_thumbnail(savedFileName);
+						int result = bookService.registerHopeBookConfirm(bookVo, hb_no);
+						
+						if (result <= 0)
+							nextPage = "admin/book/register_book_ng";
+					} else {
+						nextPage = "admin/book/register_book_ok";
+					}
+					return nextPage;
+				}
+
+		// 전체도서목록
+		@GetMapping("getAllBooks")
+		public String getAllBooks(Model model) {
+			System.out.println("[BookController] getAllBooks()");
+			
+			String nextPage = "admin/book/full_list_of_books";
+			
+			List<BookVo> bookVos = bookService.getAllBooks();
+			
+			model.addAttribute("bookVos", bookVos);
 			
 			return nextPage;
 		}
